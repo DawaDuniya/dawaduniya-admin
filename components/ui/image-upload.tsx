@@ -56,7 +56,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       </div>
       <CldUploadWidget
         onUpload={onUpload}
-        uploadPreset="u4r6q3ia"
+        uploadPreset="v4ipubw1"
       >
 
         {({open})=>{

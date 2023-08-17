@@ -37,6 +37,9 @@ export async function PATCH(
 
     const {
       name,
+      brand,
+      subtitle,
+      quantity,
       description,
       price,
       categoryId,
@@ -53,6 +56,15 @@ export async function PATCH(
     }
     if (!name) {
       return new NextResponse("Name is Required", { status: 400 });
+    }
+    if (!subtitle) {
+      return new NextResponse("Subtitle is Required", { status: 400 });
+    }
+    if (!brand) {
+      return new NextResponse("Brand is Required", { status: 400 });
+    }
+    if (!quantity) {
+      return new NextResponse("Description is Required", { status: 400 });
     }
     if (!description) {
       return new NextResponse("Description is Required", { status: 400 });
@@ -86,7 +98,10 @@ export async function PATCH(
       },
       data: {
         name,
+        brand,
         description,
+        subtitle,
+        quantity,
         price,
         categoryId,
         images: {

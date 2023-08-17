@@ -24,13 +24,23 @@ import {
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-modal";
 import ImageUpload from "@/components/ui/image-upload";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 
 const formschema = z.object({
   name: z.string().min(1),
-  images: z.object({url: z.string()}).array(),
+  brand: z.string().min(1),
+  images: z.object({ url: z.string() }).array(),
   description: z.string().min(1),
+  quantity: z.coerce.number().min(1),
+  subtitle: z.string().min(1),
   price: z.coerce.number().min(1),
   categoryId: z.string().min(1),
   // colorId:z.string().min(1),
@@ -42,14 +52,17 @@ const formschema = z.object({
 type ProductFormValues = z.infer<typeof formschema>;
 
 interface ProductFormProps {
-  initialData: Product &{
-    images:Image[]} | null;
-    categories: Category[];
+  initialData:
+    | (Product & {
+        images: Image[];
+      })
+    | null;
+  categories: Category[];
 }
 
 export const ProductForm: React.FC<ProductFormProps> = ({
   initialData,
-  categories
+  categories,
 }) => {
   const params = useParams();
   const router = useRouter();
@@ -64,32 +77,38 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(formschema),
-    defaultValues: initialData?{
-      ...initialData,
-      price:parseFloat(String(initialData?.price)),
-    } : {
-      name: "",
-      images: [],
-      description:"",
-      price:0,
-      categoryId:"",
-      isFeatured: false,
-      isArchived: false,
-
-    },
+    defaultValues: initialData
+      ? {
+          ...initialData,
+          price: parseFloat(String(initialData?.price)),
+        }
+      : {
+          name: "",
+          price: 0,
+          brand: "",
+          quantity: 0,
+          subtitle: "",
+          images: [],
+          description: "",
+          categoryId: "",
+          isFeatured: false,
+          isArchived: false,
+        },
   });
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`/api/${params.storeId}/products/${params.productId}`, data);
-      }
-      else{
+        await axios.patch(
+          `/api/${params.storeId}/products/${params.productId}`,
+          data
+        );
+      } else {
         await axios.post(`/api/${params.storeId}/products`, data);
       }
       router.refresh();
-      router.push(`/${params.storeId}/products`)
+      router.push(`/${params.storeId}/products`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong!");
@@ -113,7 +132,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     }
   };
 
-  
   return (
     <>
       <AlertModal
@@ -148,10 +166,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormItem>
                 <FormLabel>BackgroundImage</FormLabel>
                 <ImageUpload
-                  value={field.value.map((image)=>image.url)}
+                  value={field.value.map((image) => image.url)}
                   disabled={loading}
-                  onChange={(url) => field.onChange([...field.value,{url}])}
-                  onRemove={(url) => field.onChange([...field.value.filter((current)=>current.url !== url)])}
+                  onChange={(url) => field.onChange([...field.value, { url }])}
+                  onRemove={(url) =>
+                    field.onChange([
+                      ...field.value.filter((current) => current.url !== url),
+                    ])
+                  }
                 />
                 <FormMessage />
               </FormItem>
@@ -165,11 +187,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                  <Input
-                    disabled={loading}
-                    placeholder="Product Name"
-                    {...field}
-                  />
+                    <Input
+                      disabled={loading}
+                      placeholder="Product Name"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -177,16 +199,33 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             />
             <FormField
               control={form.control}
-              name="description"
+              name="brand"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Brand Name</FormLabel>
                   <FormControl>
-                  <Input
-                    disabled={loading}
-                    placeholder="Product Description"
-                    {...field}
-                  />
+                    <Input
+                      disabled={loading}
+                      placeholder="Product Name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="subtitle"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Composition</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Product Composition"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -199,12 +238,47 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 <FormItem>
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                  <Input
-                    type="number"
+                    <Input
+                      type="number"
+                      disabled={loading}
+                      placeholder="Price in ₹"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                    placeholder="Product Description"
                     disabled={loading}
-                    placeholder="Price in ₹"
                     {...field}
-                  />
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="quantity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Quantity</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="quantity"
+                      disabled={loading}
+                      placeholder=""
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -224,17 +298,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                        ></SelectValue>
+                        <SelectValue defaultValue={field.value}></SelectValue>
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {categories.map((category)=>(
-                        <SelectItem 
-                        key={category.id}
-                        value={category.id}
-                        >{category.name}</SelectItem>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -249,15 +320,17 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                   <FormControl>
                     <Checkbox
-                    checked={field.value}
-                    // @ts-ignore
-                    onCheckedChange={field.onChange}
+                      checked={field.value}
+                      // @ts-ignore
+                      onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>Featured</FormLabel>
-                      <FormDescription>This product will appeared on Home page</FormDescription>
-                    </div>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Featured</FormLabel>
+                    <FormDescription>
+                      This product will appeared on Home page
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />
@@ -268,15 +341,17 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                   <FormControl>
                     <Checkbox
-                    checked={field.value}
-                    // @ts-ignore
-                    onCheckedChange={field.onChange}
+                      checked={field.value}
+                      // @ts-ignore
+                      onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>Archived</FormLabel>
-                      <FormDescription>This product will not appeared on anywhere on store</FormDescription>
-                    </div>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Archived</FormLabel>
+                    <FormDescription>
+                      This product will not appeared on anywhere on store
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />

@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/components/ui/data-table";
-import { ApiList } from "@/components/ui/api-list";
 import {  OrderColumn, columns } from "./columns";
 
 
@@ -25,12 +24,12 @@ export const OrderClient :React.FC<OrderClientProps>= ({
     return ( <>
     
         <Heading
-        title={`Billboard (${data.length})`}
+        title={`Orders (${data.length})`}
         description="Manage orders for your store"
         />
     <Separator/>
 
-    <DataTable searchKey="label" columns={columns} data={data}/>
+    <DataTable searchKey="products" columns={columns} data={data}/>
     </> );
 }
  

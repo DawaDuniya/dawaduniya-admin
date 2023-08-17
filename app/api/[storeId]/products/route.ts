@@ -13,6 +13,9 @@ export async function POST(
 
     const {
 name, 
+brand,
+subtitle,
+quantity,
 description,
 price, 
 categoryId,
@@ -28,6 +31,15 @@ isArchived,
       return new NextResponse("Images are Required", { status: 400 });
     }
     if (!name) {
+      return new NextResponse("Name is Required", { status: 400 });
+    }
+    if (!brand) {
+      return new NextResponse("Name is Required", { status: 400 });
+    }
+    if (!subtitle) {
+      return new NextResponse("Name is Required", { status: 400 });
+    }
+    if (!quantity) {
       return new NextResponse("Name is Required", { status: 400 });
     }
     if (!description) {
@@ -53,10 +65,16 @@ isArchived,
     if (!storeByUserId) {
       return new NextResponse("Unauthorized", { status: 403 });
     }
+    if(description.length>=194){
+      return new NextResponse("Description can store only 194 characters",{status:300})
+    }
     const product = await prismadb.product.create({
       data: {
         name,
+        brand,
         description,
+        subtitle,
+        quantity,
         price,
         categoryId,
         isFeatured,
