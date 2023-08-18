@@ -36,7 +36,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       toast.success("Product is Deleted.");
     } catch (error) {
       toast.error(
-        "Make Sure you removed all  categories using this billboard first."
+        "Oops! Something went wrong."
       );
     } finally {
       setLoading(false);
@@ -79,7 +79,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </DropdownMenuItem>
 
           <DropdownMenuItem onClick={()=>setOpen(true)}>
-            <Trash className="mr-2 h-4 w-4" />
+            <Trash className="mr-2 h-4 w-4"/>
             Remove
           </DropdownMenuItem>
         </DropdownMenuContent>
