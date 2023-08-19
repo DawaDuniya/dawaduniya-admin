@@ -16,7 +16,10 @@ name,
 brand,
 subtitle,
 quantity,
-description,
+introduction,
+use, 
+sideEffect,
+direction,
 price, 
 categoryId,
 images,
@@ -42,8 +45,17 @@ isArchived,
     if (!quantity) {
       return new NextResponse("Name is Required", { status: 400 });
     }
-    if (!description) {
-      return new NextResponse("Description is Required", { status: 400 });
+    if (!introduction) {
+      return new NextResponse("Introduction is Required", { status: 400 });
+    }
+    if (!use) {
+      return new NextResponse("Use is Required", { status: 400 });
+    }
+    if (!sideEffect) {
+      return new NextResponse("Side Effects is Required", { status: 400 });
+    }
+    if(!direction){
+      return new NextResponse("Directions are required", {status: 400})
     }
     if (!price) {
       return new NextResponse("Price is Required", { status: 400 });
@@ -65,14 +77,14 @@ isArchived,
     if (!storeByUserId) {
       return new NextResponse("Unauthorized", { status: 403 });
     }
-    if(description.length>=194){
-      return new NextResponse("Description can store only 194 characters",{status:300})
-    }
     const product = await prismadb.product.create({
       data: {
         name,
         brand,
-        description,
+        introduction,
+        use,
+        sideEffect,
+        direction,
         subtitle,
         quantity,
         price,

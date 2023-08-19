@@ -21,6 +21,7 @@ model store {
   order     Order[]     @relation("StoreToOrder")
   // colors    Color[]     @relation("StoreToColor")
   products  Product[]   @relation("StoreToProduct")
+  prescription Prescription[] @relation("StoreToPrescriptions")
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 }
@@ -53,57 +54,27 @@ model Category {
   @@index([billboardId])
 }
 
-// model Size {
-//   id        String    @id @default(uuid())
-//   storeId   String
-//   store     store     @relation("StoreToSize", fields: [storeId], references: [id])
-//   name      String
-//   value     String
-//   products  Product[]
-//   createdAt DateTime  @default(now())
-//   updatedAt DateTime  @updatedAt
-
-//   @@index([storeId])
-// }
-
-// model Color {
-//   id        String    @id @default(uuid())
-//   storeId   String
-//   store     store     @relation("StoreToColor", fields: [storeId], references: [id])
-//   name      String
-//   value     String
-//   products  Product[]
-//   createdAt DateTime  @default(now())
-//   updatedAt DateTime  @updatedAt
-
-//   @@index([storeId])
-// }
-
 model Product {
-  
-  id          String      @id @default(uuid())
-  storeId     String
-  store       store       @relation("StoreToProduct", fields: [storeId], references: [id])
-  name        String
-  brand       String
-  description String
-  subtitle    String
-  quantity    Int
-  price       Decimal
-  categoryId  String
-  category    Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  isFeatured  Boolean     @default(false)
-  isArchived  Boolean     @default(false)
-  images      Image[]
-  orderItems  OrderItem[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  // sizeId      String
-  // size        Size     @relation(fields: [sizeId], references: [id])
-  // colorId     String
-  // color       Color    @relation(fields: [colorId], references: [id])
-  // @@index([sizeId])
-  // @@index([colorId])
+  id           String      @id @default(uuid())
+  storeId      String
+  store        store       @relation("StoreToProduct", fields: [storeId], references: [id])
+  name         String
+  brand        String
+  introduction String
+  use          String
+  sideEffect   String
+  direction    String
+  subtitle     String
+  quantity     Int
+  price        Decimal
+  categoryId   String
+  category     Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  isFeatured   Boolean     @default(false)
+  isArchived   Boolean     @default(false)
+  images       Image[]
+  orderItems   OrderItem[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 
   @@index([storeId])
   @@index([categoryId])
@@ -119,10 +90,21 @@ model Image {
 
   @@index([productId])
 }
+model Prescription{
+  id String @id @default(uuid())
+  storeId String
+  store store @relation("StoreToPrescriptions", fields: [storeId], references: [id])
+  name String
+  phoneNumber String @default("")
+  imageURL String
+  createdAt DateTime @default(now())
+  @@index([storeId])
 
+}
 model Order {
   id              String      @id @default(uuid())
   storeId         String
+  name            String
   store           store       @relation("StoreToOrder", fields: [storeId], references: [id])
   orderItems      OrderItem[]
   isPaid          Boolean     @default(false)

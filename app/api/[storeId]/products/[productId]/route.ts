@@ -17,7 +17,7 @@ export async function GET(
       include: {
         images: true,
         category: true,
-      }
+      },
     });
 
     return NextResponse.json(product);
@@ -40,7 +40,10 @@ export async function PATCH(
       brand,
       subtitle,
       quantity,
-      description,
+      introduction,
+      use,
+      sideEffect,
+      direction,
       price,
       categoryId,
       images,
@@ -64,10 +67,19 @@ export async function PATCH(
       return new NextResponse("Brand is Required", { status: 400 });
     }
     if (!quantity) {
-      return new NextResponse("Description is Required", { status: 400 });
+      return new NextResponse("Quantity is Required", { status: 400 });
     }
-    if (!description) {
-      return new NextResponse("Description is Required", { status: 400 });
+    if (!introduction) {
+      return new NextResponse("Introduction is Required", { status: 400 });
+    }
+    if (!use) {
+      return new NextResponse("Use is Required", { status: 400 });
+    }
+    if (!sideEffect) {
+      return new NextResponse("Side Effect is Required", { status: 400 });
+    }
+    if (!direction) {
+      return new NextResponse("Direction is Required", { status: 400 });
     }
     if (!price) {
       return new NextResponse("Price is Required", { status: 400 });
@@ -99,7 +111,10 @@ export async function PATCH(
       data: {
         name,
         brand,
-        description,
+        introduction,
+        use,
+        sideEffect,
+        direction,
         subtitle,
         quantity,
         price,

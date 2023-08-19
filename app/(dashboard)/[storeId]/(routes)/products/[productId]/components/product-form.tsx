@@ -38,9 +38,12 @@ const formschema = z.object({
   name: z.string().min(1),
   brand: z.string().min(1),
   images: z.object({ url: z.string() }).array(),
-  description: z.string().min(1),
-  quantity: z.coerce.number().min(1),
+  introduction: z.string().min(1),
+  use: z.string().min(1),
+  sideEffect: z.string().min(1),
+  direction: z.string().min(1),
   subtitle: z.string().min(1),
+  quantity: z.coerce.number().min(1),
   price: z.coerce.number().min(1),
   categoryId: z.string().min(1),
   // colorId:z.string().min(1),
@@ -87,9 +90,12 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           price: 0,
           brand: "",
           quantity: 0,
-          subtitle: "",
           images: [],
-          description: "",
+          introduction: "",
+          use:"",
+          sideEffect:"",
+          direction:"",
+          subtitle: "",
           categoryId: "",
           isFeatured: false,
           isArchived: false,
@@ -206,8 +212,76 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Product Name"
+                      placeholder="Brand Name"
                       {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="introduction"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Introduction</FormLabel>
+                  <FormControl>
+                    <Textarea
+                    placeholder="Product Introduction"
+                    disabled={loading}
+                    {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="use"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Use</FormLabel>
+                  <FormControl>
+                    <Textarea
+                    placeholder="Product use"
+                    disabled={loading}
+                    {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="sideEffect"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Side Effects</FormLabel>
+                  <FormControl>
+                    <Textarea
+                    placeholder="Product Side Effects"
+                    disabled={loading}
+                    {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="direction"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Directions</FormLabel>
+                  <FormControl>
+                    <Textarea
+                    placeholder="Product Directions"
+                    disabled={loading}
+                    {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -249,23 +323,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                    placeholder="Product Description"
-                    disabled={loading}
-                    {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            
             <FormField
               control={form.control}
               name="quantity"

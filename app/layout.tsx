@@ -7,7 +7,7 @@ import { ToasterProvider } from "@/Providers/toast-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
+export const metadata:Metadata = {
   title: "Admin Dashboard",
   description: "Admin Dashboard",
 };

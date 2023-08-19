@@ -29,7 +29,6 @@ const ProductsPage = async({
         brand: item.brand,
         subtitle: item.subtitle,
         quantity: item.quantity,
-        description: item.description,
         price: formatter.format(item.price.toNumber()),
         // size: item.size.value,
         category: item.category.name,
