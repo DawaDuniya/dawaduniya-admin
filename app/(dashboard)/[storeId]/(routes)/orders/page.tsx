@@ -10,7 +10,7 @@ const OrdersPage = async({
 }:{
     params:{storeId:string}
 }) => {
-    const orders= await prismadb.order.findMany({
+    const orders= await prismadb.book.findMany({
         where:{
             storeId:params.storeId
         },
@@ -28,7 +28,7 @@ const OrdersPage = async({
 
     const formattedOrders: OrderColumn[] = orders.map((item)=>({
         id: item.id,
-        name:item.name,
+        name:item.cust_name,
         phone: item.phone,
         quantity: item.orderedQuantity,
         address: item.address,

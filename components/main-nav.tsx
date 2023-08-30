@@ -26,16 +26,7 @@ export function MainNav({
       label: "Categories",
       active: pathName === `/${params.storeId}/categories`,
     },
-    // {
-    //   href: `/${params.storeId}/sizes`,
-    //   label: "Sizes",
-    //   active: pathName === `/${params.storeId}/sizes`,
-    // },
-    // {
-    //   href: `/${params.storeId}/colors`,
-    //   label: "Colors",
-    //   active: pathName === `/${params.storeId}/colors`,
-    // },
+    
     {
       href: `/${params.storeId}/products`,
       label: "Products",

@@ -12,18 +12,18 @@ datasource db {
 }
 
 model store {
-  id        String      @id @default(uuid())
-  name      String
-  userId    String
-  billBoard Billboard[] @relation("StoreToBillboard")
-  category  Category[]  @relation("StoreToCategory")
+  id           String         @id @default(uuid())
+  name         String
+  userId       String
+  billBoard    Billboard[]    @relation("StoreToBillboard")
+  category     Category[]     @relation("StoreToCategory")
   // sizes     Size[]      @relation("StoreToSize")
-  order     Order[]     @relation("StoreToOrder")
+  order        Book[]         @relation("StoreToOrder")
   // colors    Color[]     @relation("StoreToColor")
-  products  Product[]   @relation("StoreToProduct")
+  products     Product[]      @relation("StoreToProduct")
   prescription Prescription[] @relation("StoreToPrescriptions")
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 }
 
 model Billboard {
@@ -90,21 +90,23 @@ model Image {
 
   @@index([productId])
 }
-model Prescription{
-  id String @id @default(uuid())
-  storeId String
-  store store @relation("StoreToPrescriptions", fields: [storeId], references: [id])
-  name String
-  phoneNumber String @default("")
-  imageURL String
-  createdAt DateTime @default(now())
-  @@index([storeId])
 
+model Prescription {
+  id          String   @id @default(uuid())
+  storeId     String
+  store       store    @relation("StoreToPrescriptions", fields: [storeId], references: [id])
+  name        String
+  phoneNumber String   @default("")
+  imageURL    String
+  createdAt   DateTime @default(now())
+
+  @@index([storeId])
 }
-model Order {
+
+model Book {
   id              String      @id @default(uuid())
   storeId         String
-  name            String
+  cust_name       String
   store           store       @relation("StoreToOrder", fields: [storeId], references: [id])
   orderItems      OrderItem[]
   isPaid          Boolean     @default(false)
@@ -120,7 +122,8 @@ model Order {
 model OrderItem {
   id        String  @id @default(uuid())
   orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
+  quantity  Int
+  order     Book    @relation(fields: [orderId], references: [id])
   productId String
   product   Product @relation(fields: [productId], references: [id])
 
