@@ -4,7 +4,7 @@ import { Trash } from "lucide-react/";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Billboard, Category, Image, Product } from "@prisma/client";
+import { Category, Image, Product } from "@prisma/client";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
@@ -45,6 +45,7 @@ const formschema = z.object({
   subtitle: z.string().min(1),
   quantity: z.coerce.number().min(1),
   price: z.coerce.number().min(1),
+  discount: z.coerce.number().min(1),
   categoryId: z.string().min(1),
   // colorId:z.string().min(1),
   // sizeId: z.string().min(1),
@@ -90,6 +91,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           price: 0,
           brand: "",
           quantity: 0,
+          discount:0,
           images: [],
           introduction: "",
           use:"",
@@ -129,7 +131,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
       router.refresh();
       router.push(`/${params.storeId}/products`);
-      toast.success("Billboard Deleted.");
+      toast.success("Product Deleted.");
     } catch (error) {
       toast.error("Something went wrong!");
     } finally {
@@ -225,7 +227,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               name="introduction"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Introduction</FormLabel>
+                  <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea
                     placeholder="Product Introduction"
@@ -324,6 +326,24 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               )}
             />
             
+            <FormField
+              control={form.control}
+              name="discount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Discount</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="discount"
+                      disabled={loading}
+                      placeholder="Discount in %"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="quantity"

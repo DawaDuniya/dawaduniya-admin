@@ -65,8 +65,9 @@ model Product {
   sideEffect   String
   direction    String
   subtitle     String
-  quantity     Int
+  quantity     Int 
   price        Decimal
+  discount     Int
   categoryId   String
   category     Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
   isFeatured   Boolean     @default(false)
