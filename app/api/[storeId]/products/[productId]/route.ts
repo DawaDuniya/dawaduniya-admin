@@ -45,6 +45,7 @@ export async function PATCH(
       sideEffect,
       direction,
       price,
+      discount,
       categoryId,
       images,
       isFeatured,
@@ -118,6 +119,7 @@ export async function PATCH(
         subtitle,
         quantity,
         price,
+        discount,
         categoryId,
         images: {
           deleteMany: {},
