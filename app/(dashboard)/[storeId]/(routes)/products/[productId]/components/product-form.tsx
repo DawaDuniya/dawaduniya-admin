@@ -45,7 +45,7 @@ const formschema = z.object({
   subtitle: z.string().min(1),
   quantity: z.coerce.number().min(1),
   price: z.coerce.number().min(1),
-  discount: z.coerce.number().min(1),
+  discount: z.coerce.number().min(0),
   categoryId: z.string().min(1),
   // colorId:z.string().min(1),
   // sizeId: z.string().min(1),
@@ -85,13 +85,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       ? {
           ...initialData,
           price: parseFloat(String(initialData?.price)),
+          discount: parseFloat(String(initialData?.discount)),
         }
       : {
           name: "",
           price: 0,
           brand: "",
           quantity: 0,
-          discount:0,
+          discount: 0,
           images: [],
           introduction: "",
           use:"",
@@ -334,7 +335,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   <FormLabel>Discount</FormLabel>
                   <FormControl>
                     <Input
-                      type="discount"
+                      type="number"
                       disabled={loading}
                       placeholder="Discount in %"
                       {...field}
